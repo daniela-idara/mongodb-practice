@@ -1,8 +1,9 @@
 const MongoClient = require('mongodb').MongoClient;
 const assert = require('assert');
+const products = require('./products');
 
 // change this to your mongodb atlas uri
-const url = '';
+const url = 'mongodb+srv://daniela-idara:ebRXVvVywtErhDc9@daniela-idara-nnzoe.mongodb.net/test?retryWrites=true';
 
 // Create a new MongoClient
 const client = new MongoClient(url);
@@ -16,7 +17,7 @@ function doStuffAfterConnected(err){
       return;
     }
     console.log("Connected successfully to server");
-    const db = client.db("???");
+    const db = client.db("aca-store");
     insertSomething(db,()=>{
       findSomething(db,()=>{
         client.close();
@@ -24,12 +25,12 @@ function doStuffAfterConnected(err){
     });
    
 }
-
+// this code goes into the controllers
 const findSomething = function(db,callback) {
     // Get the documents collection
-    const collection = db.collection('???');
+    const collection = db.collection('products');
     // Find some documents
-    let found = collection.find({});
+    let found = collection.find({name:'Almond'});
     found.toArray(function(err, docs) {
       assert.equal(err, null);
       console.log("Found the following records");
@@ -37,13 +38,12 @@ const findSomething = function(db,callback) {
       callback();
     });
   }
+  
 const insertSomething = function(db,callback) {
     // Get the documents collection
-    const collection = db.collection('???');
+    const collection = db.collection('products');
     // Insert some documents
-    collection.insertMany([
-      {a : 1}, {a : 2}, {a : 3}
-    ], function(err, result) {
+    collection.insertMany(products, function(err, result) {
       console.log("Inserted documents into the collection");
       callback();
     });
